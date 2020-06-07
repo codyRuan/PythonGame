@@ -27,7 +27,7 @@ class Main(object):
         '''
         parg = argparse.ArgumentParser()
         parg.add_argument('-l', '--location',
-                          default='localhost:8000', help='Location of server. Default: localhost:8000')
+                          default='localhost:8787', help='Location of server. Default: localhost:8000')
         opt = parg.parse_args()
         print(type(opt))
         opt.size = (720, 480)
@@ -35,7 +35,9 @@ class Main(object):
 
     def Main(self):
         screen = pygame.display.set_mode(self.opt.size)
-        mainScreen = MainScreen({})
+        ip, port = self.opt.location.split(':')
+        port = int(port)
+        mainScreen = MainScreen(ip, port)
         game_started = False
         mainScreen.Exec(screen)
 

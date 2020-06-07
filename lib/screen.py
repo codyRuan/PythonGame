@@ -1,7 +1,7 @@
 
 class Screen(object):
-    def __init__(self, opt):
-        self.opt = opt
-    def Draw(self):
+    def __init__(self):
+        pass
+    def Exec(self):
         raise NotImplementedError
     

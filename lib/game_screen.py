@@ -1,24 +1,58 @@
 import os
 import sys
+from easydict import EasyDict
 import pygame
-from pathlib import Path
+import socket
+import json
 
 from lib import Screen
+from lib.map import Map0
 
 
 class GameScreen(Screen):
-    def __init__(self, opt):
-        super().__init__(opt)
-        
-    def Draw(self):
+    def __init__(self, sock, screen):
+        super().__init__()
+        self.sock = sock
+        self.screen = screen
+
+    def StopRequest(self):
         pass
 
-    def Exec(self, screen):
+    def GetRequest(self, package):
+        self.sock.send(json.dumps(package))
+        self.sock.settimeout(2.0)
+        res = self.sock.recv(4096)
+        return EasyDict(json.loads(res))
+
+    def Exec(self, opt):
         print('Game Screen')
+        clock = pygame.time.Clock()
+        framerate = 1.0 / opt.fps
+        control = opt.control
         while True:
             events = pygame.event.get()
+            package = {}
+            k = None
             for event in events:
                 if event.type == pygame.QUIT:
                     sys.exit()
-            screen.fill((0, 0, 0))
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        k = 1
+                    elif event.key == pygame.K_RIGHT:
+                        k = 2
+                    elif event.key == pygame.K_DOWN:
+                        k = 3
+                    elif event.key == pygame.K_LEFT:
+                        k = 4
+                    elif event.key == pygame.K_SPACE:
+                        k = 5
+            package[f'player{control}'] = k
+            res = self.GetRequest(package)
+            self.Update(res)
             pygame.display.flip()
+            clock.tick(framerate)
+
+    def Update(res):
+        self.screen.fill((0, 0, 0))
+        return
