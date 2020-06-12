@@ -19,7 +19,7 @@ class GameScreen(Screen):
         pass
 
     def ActionRequest(self, package):
-        self.sock.send(json.dumps(package))
+        self.sock.send(json.dumps(package).encode('utf-8'))
         self.sock.settimeout(2.0)
         res = self.sock.recv(4096)
         return EasyDict(json.loads(res))

@@ -8,6 +8,7 @@ import pygame
 from lib import Screen
 from lib import GameScreen
 from lib import Button
+from easydict import EasyDict
 
 
 class MainScreen(Screen):
@@ -45,10 +46,10 @@ class MainScreen(Screen):
 
     def StartRequest(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((ip, port))
+        s.connect((self.server_ip, self.sever_port))
         package = {}
         package['request'] = 'START'
-        s.send(json.dumps(package))
+        s.send(json.dumps(package).encode('utf-8'))
         s.settimeout(2.0)
         res = json.loads(s.recv(4096))
         print(f'Client receives {json.dumps(res, indent=4)}')

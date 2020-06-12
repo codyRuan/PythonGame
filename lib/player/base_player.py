@@ -1,3 +1,4 @@
+import pygame
 class BasePlayer(object):
     def __init__(self):
         self.img_path = None
@@ -6,7 +7,10 @@ class BasePlayer(object):
         self.y = None
         self.status = None
 
+    def LoadImg(self):
+
     def Update(self, info):
         self.x = info.x
         self.y = info.y
         self.status = info.status
+    
