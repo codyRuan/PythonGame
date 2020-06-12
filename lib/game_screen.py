@@ -19,7 +19,7 @@ class GameScreen(Screen):
         pass
 
     def GetRequest(self, package):
-        self.sock.send(json.dumps(package))
+        self.sock.send(json.dumps(package).encode('utf-8'))
         self.sock.settimeout(2.0)
         res = self.sock.recv(4096)
         return EasyDict(json.loads(res))
@@ -47,9 +47,9 @@ class GameScreen(Screen):
                         k = 4
                     elif event.key == pygame.K_SPACE:
                         k = 5
-            package[f'player{control}'] = k
-            res = self.GetRequest(package)
-            self.Update(res)
+            # package[f'player{control}'] = k
+            # res = self.GetRequest(package)
+            # self.Update(res)
             pygame.display.flip()
             clock.tick(framerate)
 
