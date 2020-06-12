@@ -38,7 +38,6 @@ class Main(object):
         ip, port = self.opt.location.split(':')
         port = int(port)
         mainScreen = MainScreen(ip, port)
-        game_started = False
         mainScreen.Exec(screen)
 
 
