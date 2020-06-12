@@ -7,7 +7,7 @@ from lib.map import BaseMap
 class Map0(BaseMap):
     def __init__(self):
         super.__init__()
-        self.config()
+        self.Config()
 
     def Config():
         res_path = Path.cwd().parent.parent.parent / 'resources' / 'map1'

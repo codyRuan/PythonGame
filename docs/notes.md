@@ -27,7 +27,7 @@
                 "x": 350,
                 "y": 250,
                 "speed": 5,
-                "range": 7,
+                "range": 4,
                 "status": "DEAD"
             },
             {
@@ -46,7 +46,7 @@
 - `control`: Player id for this client to control. (1 ~ n)
 - `players`:
     - `status`:
-        - Choices are `ALIVE`, `DEAD`
+        - Choices are `ALIVE`, `DEAD`, `BUBBLE`
 ## Map
 - Types of blocks:
     - Breakable

@@ -18,7 +18,7 @@ class GameScreen(Screen):
     def StopRequest(self):
         pass
 
-    def GetRequest(self, package):
+    def ActionRequest(self, package):
         self.sock.send(json.dumps(package))
         self.sock.settimeout(2.0)
         res = self.sock.recv(4096)
@@ -28,7 +28,10 @@ class GameScreen(Screen):
         print('Game Screen')
         clock = pygame.time.Clock()
         framerate = 1.0 / opt.fps
+        map_id = opt.map.id
         control = opt.control
+        players = opt.players
+
         while True:
             events = pygame.event.get()
             package = {}
@@ -48,10 +51,12 @@ class GameScreen(Screen):
                     elif event.key == pygame.K_SPACE:
                         k = 5
             package[f'player{control}'] = k
-            res = self.GetRequest(package)
+            res = self.ActionRequest(package)
             self.Update(res)
             pygame.display.flip()
             clock.tick(framerate)
+
+    def InitializeGame():
 
     def Update(res):
         self.screen.fill((0, 0, 0))

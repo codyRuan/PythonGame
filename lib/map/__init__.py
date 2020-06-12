@@ -7,4 +7,4 @@ MAPS = [
     Map1
 ] 
 def getMap(index):
-    return MAPS[index - 1]()
+    return MAPS[index - 1]
