@@ -18,24 +18,18 @@
                 "id": 1,
                 "x": 300,
                 "y": 200,
-                "speed": 4,
-                "range": 3,
                 "status": "ALIVE"
             },
             {
                 "id": 2,
                 "x": 350,
                 "y": 250,
-                "speed": 5,
-                "range": 4,
                 "status": "DEAD"
             },
             {
                 "id": 3,
                 "x": 200,
                 "y": 160,
-                "speed": 4,
-                "range": 3,
                 "status": "ALIVE"
             },
         ]

@@ -6,7 +6,8 @@ import socket
 import json
 
 from lib import Screen
-from lib.map import Map0
+from lib import player
+from lib import maps
 
 
 class GameScreen(Screen):
@@ -14,23 +15,26 @@ class GameScreen(Screen):
         super().__init__()
         self.sock = sock
         self.screen = screen
+        self.player_dict = {}
 
     def StopRequest(self):
         pass
 
-    def ActionRequest(self, package):
+    def ActionRequest(self, package: EasyDict):
         self.sock.send(json.dumps(package))
         self.sock.settimeout(2.0)
         res = self.sock.recv(4096)
         return EasyDict(json.loads(res))
 
-    def Exec(self, opt):
+    def Exec(self, opt: EasyDict):
         print('Game Screen')
         clock = pygame.time.Clock()
         framerate = 1.0 / opt.fps
-        map_id = opt.map.id
         control = opt.control
-        players = opt.players
+        self.game_map = maps.get(opt.map.id)()
+        for player_info in opt.players:
+            p = player.get(player_info.id)()
+            self.player_dict.append(p)
 
         while True:
             events = pygame.event.get()
@@ -57,7 +61,14 @@ class GameScreen(Screen):
             clock.tick(framerate)
 
     def InitializeGame():
+        pass
 
     def Update(res):
         self.screen.fill((0, 0, 0))
+        self.screen.blit(self.game_map.GetSurface(), (0, 0))
+        for player_info in res.players:
+            idx = player_info.id
+            p = self.player_dict[idx]
+            p.Update(player_info)
+            self.screen.blit(p.GetSurface(), (p.y, p.x))
         return
