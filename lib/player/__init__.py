@@ -4,7 +4,7 @@ from lib.player.player2 import Player2
 
 PLAYERS = [
     Player1,
-    Plyaer2
+    Player2
 ]
 def get(index):
     return PLAYERS[index - 1]

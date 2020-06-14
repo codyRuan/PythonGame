@@ -8,17 +8,24 @@ class BasePlayer(object):
         self.x = None
         self.y = None
         self.status = 'ALIVE'
+        self.direct = 2
 
     def LoadImg(self):
-        print(f'Loading player image from {self.img_path}')
-        img = pygame.image.load(self.img_path)
+        print(f'Loading player image from {self.img_path.resolve()}')
+        img = pygame.image.load(str(self.img_path))
         img = pygame.transform.scale(img, self.img_size)
         return img
 
-    def Update(self, info: EasyDict):
-        self.x = info.x
-        self.y = info.y
-        self.status = info.status
+    def SetDirection(self, d):
+        self.direct = d
+
+    # def SetPosition(self, x, y):
+    #     self.x = x
+    #     self.y = y
+
+    def SetPosition(self, pos: list):
+        self.x = pos[0]
+        self.y = pos[1]
 
     def GetX(self):
         return self.x
@@ -26,5 +33,5 @@ class BasePlayer(object):
     def GetY(self):
         return self.y
 
-    def GetSurface():
+    def GetSurface(self):
         return self.img

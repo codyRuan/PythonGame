@@ -27,9 +27,8 @@ class Main(object):
         '''
         parg = argparse.ArgumentParser()
         parg.add_argument('-l', '--location',
-                          default='localhost:8787', help='Location of server. Default: localhost:8787')
+                          default='localhost:8888', help='Location of server. Default: localhost:8888')
         opt = parg.parse_args()
-        print(type(opt))
         opt.size = (720, 480)
         return opt
 

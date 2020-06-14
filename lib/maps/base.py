@@ -8,10 +8,11 @@ class BaseMap(object):
         self.img_size = None
 
     def LoadImg(self):
-        print(f'Loading map image from {self.img_path}')
-        img = pygame.image.load(self.img_path)
+        print(f'Loading map image from {self.img_path.resolve()}')
+        assert self.img_path.exists(), 'Path doesn\'t exist'
+        img = pygame.image.load(str(self.img_path))
         img = pygame.transform.scale(img, self.img_size)
         return img
-    
+
     def GetSurface(self):
         return self.img
