@@ -3,11 +3,14 @@ import sys
 from easydict import EasyDict
 import pygame
 import socket
-import json
+import ujson as json
+from threading import Thread
 
 from lib import Screen
 from lib import player
 from lib import maps
+
+FPS = 30.0
 
 
 class GameScreen(Screen):
@@ -16,59 +19,80 @@ class GameScreen(Screen):
         self.sock = sock
         self.screen = screen
         self.player_dict = {}
+        self.recv_str = ''
+        self.recv_t = Thread(target=self.recvThread)
+        self.recv_t.start()
 
-    def StopRequest(self):
-        pass
+    def recvThread(self):
+        while True:
+            self.recv_str = self.sock.recv(4096).decode()
+            print(f'recvThread receives {self.recv_str} from server...')
 
-    def ActionRequest(self, package):
-        self.sock.send(json.dumps(package).encode('utf-8'))
-        self.sock.settimeout(2.0)
-        res = self.sock.recv(4096)
-        return EasyDict(json.loads(res))
+    def ActionSend(self, package: EasyDict):
+        print(f'Sending {package} to server...')
+        self.sock.send(json.dumps(package).encode())
 
-    def Exec(self, opt: EasyDict):
+    def Exec(self, opt: dict):
         print('Game Screen')
         clock = pygame.time.Clock()
-        framerate = 1.0 / opt.fps
+        fps = FPS
+        framerate = 1.0 / fps
         control = opt.control
         self.game_map = maps.get(opt.map.id)()
         for player_info in opt.players:
             p = player.get(player_info.id)()
-            self.player_dict.append(p)
-
+            p.SetPosition((player_info.x, player_info.y))
+            self.player_dict[player_info.id] = p
+        self.Update()
         while True:
             events = pygame.event.get()
             package = {}
-            k = None
+            k = -1
             for event in events:
                 if event.type == pygame.QUIT:
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
+                    print(f'Key {event.key} is pressed')
                     if event.key == pygame.K_UP:
-                        k = 1
+                        k = 0
                     elif event.key == pygame.K_RIGHT:
-                        k = 2
+                        k = 1
                     elif event.key == pygame.K_DOWN:
-                        k = 3
+                        k = 2
                     elif event.key == pygame.K_LEFT:
-                        k = 4
+                        k = 3
                     elif event.key == pygame.K_SPACE:
-                        k = 5
+                        k = 4
             package[f'player{control}'] = k
-            res = self.ActionRequest(package)
-            self.Update(res)
+            if k != -1:
+                self.ActionSend(package)
+            if self.recv_str != '':
+                self.Update()
             pygame.display.flip()
-            clock.tick(framerate)
+            clock.tick(fps)
 
     def InitializeGame():
         pass
 
-    def Update(res):
+    def Update(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.game_map.GetSurface(), (0, 0))
-        for player_info in res.players:
-            idx = player_info.id
-            p = self.player_dict[idx]
-            p.Update(player_info)
-            self.screen.blit(p.GetSurface(), (p.y, p.x))
+        if self.recv_str != '':
+            package = EasyDict(json.loads(self.recv_str))
+            for data in package.data:
+                if data.header == 'player_dead':
+                    self.player_dict[data.idx] = 'DEAD'
+                elif data.header == 'player':
+                    if 'position' in data:
+                        self.player_dict[data.idx].SetPosition(data.position)
+                    elif 'direction' in data:
+                        self.player_dict[data.idx].SetDirection(data.direction)
+                elif data.header == 'add_ball':
+                    print('balls')
+                elif data.header == 'water_area':
+                    print('w')
+                elif data.header == 'end_bomb':
+                    print('.')
+        for k, p in self.player_dict.items():
+            self.screen.blit(p.GetSurface(), (p.x, p.y))
         return

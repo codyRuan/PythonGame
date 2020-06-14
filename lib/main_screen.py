@@ -4,6 +4,7 @@ import sys
 import socket
 import json
 import pygame
+from easydict import EasyDict
 
 from lib import Screen
 from lib import GameScreen
@@ -14,9 +15,9 @@ from easydict import EasyDict
 class MainScreen(Screen):
     def __init__(self, ip, port):
         super().__init__()
-        self.btn_start = Button((0, 255, 0), 0, 0, 150, 150, 'Start')
+        self.btn_start = Button((0, 255, 0), 0, 0, 720, 480, 'Start')
         self.server_ip = ip
-        self.sever_port = port
+        self.server_port = port
 
     def Draw(self, screen):
         screen.fill((255, 255, 255))
@@ -41,17 +42,16 @@ class MainScreen(Screen):
                         sock, res = self.StartRequest()
             pygame.display.flip()
             if game_started:
-                GameScreen(sock, screen).Exec(EasyDict(res))
+                GameScreen(sock, screen).Exec(EasyDict(json.loads(res)))
             clock.tick(50)
 
     def StartRequest(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((self.server_ip, self.sever_port))
+        s.connect((self.server_ip, self.server_port))
         package = {}
         package['request'] = 'START'
-        s.send(json.dumps(package).encode('utf-8'))
-        s.settimeout(2.0)
-        res = json.loads(s.recv(4096))
+        s.send(json.dumps(package).encode())
+        res = s.recv(4096).decode()
         print(f'Client receives {json.dumps(res, indent=4)}')
         return s, res
 
