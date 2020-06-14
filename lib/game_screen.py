@@ -45,15 +45,15 @@ class GameScreen(Screen):
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
-                        k = 1
+                        k = 0
                     elif event.key == pygame.K_RIGHT:
-                        k = 2
+                        k = 1
                     elif event.key == pygame.K_DOWN:
-                        k = 3
+                        k = 2
                     elif event.key == pygame.K_LEFT:
-                        k = 4
+                        k = 3
                     elif event.key == pygame.K_SPACE:
-                        k = 5
+                        k = 4
             package[f'player{control}'] = k
             res = self.ActionRequest(package)
             self.Update(res)
