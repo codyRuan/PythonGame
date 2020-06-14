@@ -52,6 +52,6 @@ class MainScreen(Screen):
         s.send(json.dumps(package).encode('utf-8'))
         s.settimeout(2.0)
         res = json.loads(s.recv(4096))
-        print('res',res)
+        print(f'Client receives {json.dumps(res, indent=4)}')
         return s, res
 

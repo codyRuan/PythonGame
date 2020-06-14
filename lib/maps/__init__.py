@@ -6,5 +6,5 @@ MAPS = [
     Map0,
     Map1
 ] 
-def getMap(index):
-    return MAPS[index - 1]()
+def get(index):
+    return MAPS[index - 1]
