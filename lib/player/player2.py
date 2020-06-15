@@ -8,3 +8,6 @@ class Player2(BasePlayer):
         self.img_path = Path('resources/players/2/image.png').resolve()
         self.img = self.LoadImg()
 
+    def SetBubbleImage(self):
+        self.img_path = Path('resources/players/2/bubble.jpg').resolve()
+        self.img = self.LoadImg()

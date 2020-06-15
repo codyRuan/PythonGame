@@ -1,6 +1,6 @@
 import pygame
 
-class Bomb(pygame.sprite.Sprite):
+class BaseBomb(pygame.sprite.Sprite):
     def __init__(self, scene):
         pygame.sprite.Sprite.__init__(self)
         self.main_scene = scene
@@ -38,7 +38,4 @@ class Bomb(pygame.sprite.Sprite):
                 self.frame = self.first_frame
             self.last_time = current_time
             self.image = self.images[self.frame]
-            if self.rect.x < 0:
-                self.rect.x = 580
-            self.rect.x -= 8
         

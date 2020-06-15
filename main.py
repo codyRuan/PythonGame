@@ -29,7 +29,7 @@ class Main(object):
         parg.add_argument('-l', '--location',
                           default='localhost:8888', help='Location of server. Default: localhost:8888')
         opt = parg.parse_args()
-        opt.size = (720, 480)
+        opt.size = (800, 600)
         return opt
 
     def Main(self):
