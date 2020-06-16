@@ -71,6 +71,7 @@ class GameScreen(Screen):
     def Exec(self, opt: dict):
         print('Game Screen')
         pygame.mixer.music.load("./resources/BGM/game.mp3")
+        
         pygame.mixer.music.play(-1,0.0)
         clock = pygame.time.Clock()
         fps = FPS
@@ -144,7 +145,8 @@ class GameScreen(Screen):
             for data in package.data:
                 if data.header == 'player_dead':
                     self.player_dict[data.idx].Dead()
-                    EndScreen(self.screen).Exec(data.idx)
+                    screen1 = pygame.display.set_mode((800,600))
+                    EndScreen(screen1).Exec(data.idx)
                 elif data.header == 'player':
                     if 'position' in data:
                         self.player_dict[data.idx].SetPosition(data.position)
