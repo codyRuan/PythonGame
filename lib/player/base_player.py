@@ -11,17 +11,15 @@ class BasePlayer(object):
         self.direct = 2
 
     def LoadImg(self):
-        print(f'Loading player image from {self.img_path.resolve()}')
+        #print(f'Loading player image from {self.img_path.resolve()}')
         img = pygame.image.load(str(self.img_path))
         img = pygame.transform.scale(img, self.img_size)
         return img
 
-    def SetDirection(self, d):
-        self.direct = d
-
     # def SetPosition(self, x, y):
     #     self.x = x
     #     self.y = y
+
 
     def SetPosition(self, pos: list):
         self.x = pos[0]
