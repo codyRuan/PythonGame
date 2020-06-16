@@ -94,7 +94,7 @@ class GameScreen(Screen):
             package = EasyDict(json.loads(self.recv_str))
             for data in package.data:
                 if data.header == 'player_dead':
-                    self.player_dict[data.idx] = 'DEAD'
+                    self.player_dict[data.idx].Dead()
                 elif data.header == 'player':
                     if 'position' in data:
                         self.player_dict[data.idx].SetPosition(data.position)
