@@ -8,5 +8,5 @@ class Map1(BaseMap):
     def __init__(self):
         super().__init__()
         self.img_path = Path('resources/maps/1/back.png').resolve()
-        self.img_size = (320, 320)
+        self.img_size = (600, 520)
         self.img = self.LoadImg()
