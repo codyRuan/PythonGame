@@ -152,6 +152,11 @@ class GameScreen(Screen):
                         self.player_dict[data.idx].SetPosition(data.position)
                     elif 'direction' in data:
                         self.player_dict[data.idx].SetDirection(data.direction)
+                elif data.header == 'player_ability':
+                    if 'position' in data:
+                        key = str(data.position[0]) + '-' + str(data.position[1])
+                        if self.block_dict.pop(key, None) == None:
+                            raise RuntimeError(f'Item on {key} does not exist!')
                 elif data.header == 'add_ball':
                     x, y = data.position
                     k = str(x)+'-'+str(y)
