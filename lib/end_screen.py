@@ -10,7 +10,7 @@ class EndScreen(Screen):
     def Draw(self, s):
         s = 1 if s == 1 else 2
         my_font = pygame.font.Font("./resources/font/Pixelony.ttf", 160)
-        text_surface = my_font.render("Player{s} \nWin!".format(s=s), True, (0,0,0), (255, 255, 255))
+        text_surface = my_font.render("Player{s} \n Win!".format(s=s), True, (0,0,0), (255, 255, 255))
         self.text = text_surface
 
     def Exec(self, s):
@@ -26,6 +26,6 @@ class EndScreen(Screen):
                 if event.type == pygame.QUIT:
                     sys.exit()
             self.screen.fill((0, 0, 0))
-            self.screen.blit(self.text, (100, 100))
+            self.screen.blit(self.text, (50, 100))
             pygame.display.flip()
             clock.tick(50)

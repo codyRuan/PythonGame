@@ -11,7 +11,11 @@ from lib import player
 from lib import maps
 from lib import bomb
 from lib import watercol
+
 from lib.end_screen import EndScreen
+
+from lib import block
+
 
 FPS = 40
 
@@ -27,6 +31,7 @@ class GameScreen(Screen):
         self.group = pygame.sprite.Group()
         self.bomb_dict = {}
         self.watercol_dict = {}
+        self.block_dict = {}
 
     def RecvThread(self):
         def parseStackedJson(s):
@@ -70,7 +75,16 @@ class GameScreen(Screen):
         clock = pygame.time.Clock()
         fps = FPS
         control = opt.control
+        if 'solidobject' in opt:
+            blocks = opt.solidobject
         self.game_map = maps.get(opt.map.id)()
+        for b in blocks:
+            key = str(b[0]) + '-' + str(b[1])
+            x = int(b[0])
+            y = int(b[1])
+            status = int(b[2])
+            self.block_dict[key] = block.get(x, y, status)
+
         for player_info in opt.players:
             p = player.get(player_info.id)()
             p.SetPosition((player_info.x, player_info.y))
@@ -121,6 +135,8 @@ class GameScreen(Screen):
     def Update(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.game_map.GetSurface(), (0, 0))
+        for key, value in self.block_dict.items():
+            self.screen.blit(value.GetSurface(), (value.x, value.y))
         if len(self.recv_queue) > 0:
             recv_str = self.recv_queue.popleft()
             print('Recv str: ', recv_str)
