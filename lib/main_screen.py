@@ -66,7 +66,8 @@ class MainScreen(Screen):
             self.main_group.update(ticks, 150)
             self.main_group.draw(screen)
             if game_started:
-                GameScreen(sock, screen).Exec(EasyDict(json.loads(res)))
+                screen1 = pygame.display.set_mode((520,520))
+                GameScreen(sock, screen1).Exec(EasyDict(json.loads(res)))
             clock.tick(50)
 
     def StartRequest(self):
