@@ -4,6 +4,8 @@ class BaseWaterCol(pygame.sprite.Sprite):
     def __init__(self, scene, initial_position, width, height):
         pygame.sprite.Sprite.__init__(self)
         self.main_scene = scene
+        print('Width: ', width)
+        print('height: ', height)
         self.image = pygame.Surface([width,height])
         self.image.fill((102,255,230))
         self.rect=self.image.get_rect()

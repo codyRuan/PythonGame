@@ -43,6 +43,9 @@ class MainScreen(Screen):
         self.main_group.add(man)
 
     def Exec(self, screen):
+        pygame.mixer.init()
+        pygame.mixer.music.load("./resources/BGM/start.mp3")
+        pygame.mixer.music.play(-1,0.0)
         game_started = False
         sock = None
         clock = pygame.time.Clock()
