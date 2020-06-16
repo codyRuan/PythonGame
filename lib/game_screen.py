@@ -17,7 +17,7 @@ from lib.end_screen import EndScreen
 from lib import block
 
 
-FPS = 40
+FPS = 80
 
 class GameScreen(Screen):
     def __init__(self, sock, screen):
