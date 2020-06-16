@@ -55,9 +55,7 @@ class MainScreen(Screen):
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
-                    print(f'pos{pos}')
                     if self.button.isOver(pos):
-                        print('Clicked!')
                         game_started = True
                         sock, res = self.StartRequest()
             pygame.display.flip()
