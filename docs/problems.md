@@ -1,0 +1,2 @@
+- Server send太快, client還沒recv前下一個就已經送到了，兩個json會疊在一起
+    - 透過stack自行parse重疊的json

@@ -1,5 +1,6 @@
 import pygame
 
+
 class BaseBomb(pygame.sprite.Sprite):
     def __init__(self, scene):
         pygame.sprite.Sprite.__init__(self)
@@ -13,23 +14,22 @@ class BaseBomb(pygame.sprite.Sprite):
         self.images = []
         self.last_time = pygame.time.get_ticks()
         self.rate = 150
- 
+
     def load_images(self, filename_prefix, begin_num, end_num,
                     filename_suffix):
- 
+
         self.images = [
             pygame.image.load(filename_prefix + str(v) + filename_suffix)
             for v in range(begin_num, end_num + 1)
         ]
         self.image = self.images[0]
         self.rect = self.image.get_rect()
-        self.last_frame = end_num -1
- 
+        self.last_frame = end_num - 1
 
     def set_pos(self, x, y):
         self.rect.x = x
         self.rect.y = y
- 
+
     def update(self):
         current_time = pygame.time.get_ticks()
         if current_time > self.last_time + self.rate:
@@ -38,4 +38,3 @@ class BaseBomb(pygame.sprite.Sprite):
                 self.frame = self.first_frame
             self.last_time = current_time
             self.image = self.images[self.frame]
-        
