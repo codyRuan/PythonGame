@@ -52,7 +52,7 @@ class GameScreen(Screen):
 
         while True:
             recv_str = self.sock.recv(4096).decode('utf-8')
-            print(f'RecvThread receives {recv_str} from server...')
+            # print(f'RecvThread receives {recv_str} from server...')
             if recv_str == '':
                 raise RuntimeError('Empty string error!')
             try:
@@ -65,7 +65,7 @@ class GameScreen(Screen):
                 self.recv_queue.append(s)
 
     def ActionSend(self, package: EasyDict):
-        print(f'Sending {package} to server...')
+        # print(f'Sending {package} to server...')
         self.sock.send(json.dumps(package).encode())
 
     def Exec(self, opt: dict):
@@ -100,7 +100,7 @@ class GameScreen(Screen):
                 if event.type == pygame.QUIT:
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
-                    print(f'Key {event.key} is pressed')
+                    # print(f'Key {event.key} is pressed')
                     if event.key == pygame.K_SPACE:
                         Space_press = True
                 elif event.type == pygame.KEYUP:
@@ -140,7 +140,7 @@ class GameScreen(Screen):
             self.screen.blit(value.GetSurface(), (value.x, value.y))
         if len(self.recv_queue) > 0:
             recv_str = self.recv_queue.popleft()
-            print('Recv str: ', recv_str)
+            # print('Recv str: ', recv_str)
             package = EasyDict(json.loads(recv_str))
             for data in package.data:
                 if data.header == 'player_dead':
@@ -171,11 +171,9 @@ class GameScreen(Screen):
                     idxes = data.player_to_bubble_idx
                     for idx in idxes:
                         self.player_dict[idx].SetBubbleImage()
-                    #print(f'x1:{x1}, x2:{x2}, y1:{y1}, y2:{y2}')
                     x, y = data.position
                     k = str(x)+'-'+str(y)
                     if k in self.bomb_dict:
-                        print('Bomb removed')
                         self.group.remove(self.bomb_dict[k])
                         self.bomb_dict.pop(k, None)
                     if k not in self.watercol_dict:
