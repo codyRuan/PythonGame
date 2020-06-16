@@ -11,9 +11,9 @@ from lib import player
 from lib import maps
 from lib import bomb
 from lib import watercol
+from lib.end_screen import EndScreen
 
 FPS = 40
-
 
 class GameScreen(Screen):
     def __init__(self, sock, screen):
@@ -65,6 +65,8 @@ class GameScreen(Screen):
 
     def Exec(self, opt: dict):
         print('Game Screen')
+        pygame.mixer.music.load("./resources/BGM/game.mp3")
+        pygame.mixer.music.play(-1,0.0)
         clock = pygame.time.Clock()
         fps = FPS
         control = opt.control
@@ -77,6 +79,7 @@ class GameScreen(Screen):
         while True:
             events = pygame.event.get()
             package = {}
+            l = []
             k = -1
             for event in events:
                 if event.type == pygame.QUIT:
@@ -89,19 +92,25 @@ class GameScreen(Screen):
                     if event.key == pygame.K_SPACE:
                         if Space_press == True:
                             k = 4
+                            l.append(k)
                         Space_press = False
             keys = pygame.key.get_pressed()
             if keys[pygame.K_LEFT]:
                 k = 3
+                l.append(k)
             if keys[pygame.K_DOWN]:
                 k = 2
+                l.append(k)
             if keys[pygame.K_UP]:
                 k = 0
+                l.append(k)
             if keys[pygame.K_RIGHT]:
                 k = 1
-            package[f'player{control}'] = k
-            if k != -1:
-                self.ActionSend(package)
+                l.append(k)
+            for p in l:
+                package[f'player{control}'] = p
+                if p != -1:
+                    self.ActionSend(package)
             if len(self.recv_queue):
                 self.Update()
             self.group.update()
@@ -119,6 +128,7 @@ class GameScreen(Screen):
             for data in package.data:
                 if data.header == 'player_dead':
                     self.player_dict[data.idx].Dead()
+                    EndScreen(self.screen).Exec(data.idx)
                 elif data.header == 'player':
                     if 'position' in data:
                         self.player_dict[data.idx].SetPosition(data.position)
